@@ -1,0 +1,19 @@
+#! /bin/sh
+#
+# Docker wrapper
+
+function clean {
+    CONTAINERS=$(docker ps -qa)
+    [[ ! -z "$CONTAINERS" ]] && docker rm -fv $CONTAINERS
+    IMAGES=$(docker images|grep '<none>\|latest\|SNAPSHOT'|awk '{print $3}')
+    [[ ! -z "$IMAGES" ]] && docker rmi -f $IMAGES
+}
+
+case $ in
+    clean)
+        clean
+        ;;
+    *)
+        docker $*
+        ;;
+esac
