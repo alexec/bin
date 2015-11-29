@@ -9,9 +9,40 @@ function clean {
     [[ ! -z "$IMAGES" ]] && docker rmi -f $IMAGES
 }
 
-case $ in
+case $1 in
     clean)
         clean
+        ;;
+    kill)
+        if [ "$#" -eq 1 ]; then
+            CONTAINERS=$(docker ps -q)
+            if [ -z "$CONTAINERS" ]; then
+                echo "no running containers"
+            else
+                docker kill $CONTAINERS
+            fi
+        else
+            docker $*
+        fi
+        ;;
+    rm)
+        if [ -e docker-compose.yml ]; then
+            docker-compose $*
+        else
+            if [ "$#" -eq 1 ]; then
+                CONTAINERS=$(docker ps -qa)
+                if [ -z "$CONTAINERS" ]; then
+                    echo "no running containers"
+                else
+                    docker rm -fv $CONTAINERS
+                fi
+            else
+                docker $*
+            fi
+        fi
+        ;;
+    up)
+        docker-compose $*
         ;;
     *)
         docker $*

@@ -6,8 +6,14 @@ G=$(expr "256 * 16 * 5 - 1 ")
 B=$(expr "256 * 16 * 14 - 1 ")
 C="{$R, $G, $B}"
 
-if [ -e .bg ]; then
-    C=$(cat .bg)
+BG=.bg
+
+if [ -e $BG ]; then
+    C=$(cat $BG)
+elif [ -e ../$BG ]; then
+    C=$(cat ../$BG)
+elif [ -e ../../$BG ]; then
+    C=$(cat ../../$BG)
 fi
 
 osascript -e "tell application \"Terminal\" to set background color of window 1 to $C"
