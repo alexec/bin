@@ -1,0 +1,13 @@
+#! /bin/sh
+set -eu
+
+R=$(expr "256 * 16 * 5 - 1 ")
+G=$(expr "256 * 16 * 5 - 1 ")
+B=$(expr "256 * 16 * 14 - 1 ")
+C="{$R, $G, $B}"
+
+if [ -e .bg ]; then
+    C=$(cat .bg)
+fi
+
+osascript -e "tell application \"Terminal\" to set background color of window 1 to $C"
